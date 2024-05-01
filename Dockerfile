@@ -1,5 +1,7 @@
-# Utilizamos la imagen oficial de Nginx desde Docker Hub
 FROM nginx
 
-# Copiamos el archivo de configuración personalizado para el balanceador de carga
-COPY nginx.conf /etc/nginx/nginx.conf
+# Copiar el archivo de configuración personalizado
+COPY nginx.conf.template /etc/nginx/nginx.conf.template
+
+# CMD para configurar Nginx con las variables de entorno y luego iniciarlo
+CMD envsubst '$$BACKEND_SERVERS' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g 'daemon off;'
